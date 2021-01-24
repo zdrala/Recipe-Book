@@ -7,10 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  localSection='recipe';
-
-  changeSection(section:string)
-  {
-    this.localSection=section;
-  }
 }
