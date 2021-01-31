@@ -1,4 +1,5 @@
 import {  Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Ingredient } from "../shared/ingredient.model";
 import { ShoppingListService } from "../shopping-list/shopping-list.service";
 import { Recipe } from "./recipe.model";
@@ -6,6 +7,7 @@ import { Recipe } from "./recipe.model";
 @Injectable()
 export class RecipeService{
  
+  recipesChanged=new Subject<Recipe[]>();
     private recipes: Recipe []=[
         new Recipe('A Test Recipe','This is simply a test','https://www.eatwell101.com/wp-content/uploads/2019/04/chicken-and-asparagus-skillet-recipe-2.jpg',
         [new Ingredient('Lemon',1),
@@ -28,4 +30,20 @@ export class RecipeService{
       ingredientsToShoppingListAdd(ingredients:Ingredient[]){
         this.slService.addIngredients(ingredients);
       }    
+
+      addRecipe(recipe: Recipe)
+      {
+        this.recipes.push(recipe)
+        this.recipesChanged.next(this.recipes.slice());
+      }
+      updateRecipe(index:number,recipe:Recipe)
+      {
+        this.recipes[index]=recipe;
+        this.recipesChanged.next(this.recipes.slice());
+      }
+      deleteRecipe(index:number)
+      {
+        this.recipes.splice(index,1);
+        this.recipesChanged.next(this.recipes.slice());
+      }
 }
